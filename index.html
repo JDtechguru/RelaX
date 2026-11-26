@@ -1,0 +1,1165 @@
+<!doctype html>
+<html lang="en-GB" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#e8f1e4" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e1a14" media="(prefers-color-scheme: dark)">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="RelaX">
+<meta name="robots" content="noindex, nofollow">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+<title>RelaX</title>
+<style>
+:root{--bg:#f4f6fb;--card:#ffffff;--text:#151922;--muted:#667085;--line:#e4e7ec;--accent:#7c3aed;--accent-ink:#ffffff;--weekend:#eceff4;--holiday:#fde8e7;--holiday-ink:#b42318;--danger:#d92d20;--ok:#12b76a;--warn:#f79009;--shadow:0 1px 3px rgba(16,24,40,.08);--heat:124,58,237}
+@media (prefers-color-scheme: dark){:root{--bg:#0e1116;--card:#181c24;--text:#e9ebf0;--muted:#98a2b3;--line:#2b313c;--accent:#a78bfa;--accent-ink:#120c24;--weekend:#13161c;--holiday:#3b1f20;--holiday-ink:#ff9b91;--shadow:none;--heat:167,139,250}}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0;background:var(--bg);color:var(--text);font:15px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-tap-highlight-color:transparent}
+button{font:inherit;cursor:pointer;color:inherit}
+#app{max-width:760px;margin:0 auto;min-height:100vh;padding-bottom:calc(90px + env(safe-area-inset-bottom))}
+h1{font-size:22px;margin:6px 0}h2{font-size:19px;margin:14px 0 8px}h3{font-size:16px;margin:16px 0 8px}
+.muted{color:var(--muted)}.small{font-size:12.5px}
+.err{color:var(--danger);min-height:1em;margin:6px 0;font-size:13.5px}
+.topbar{position:sticky;top:0;z-index:5;background:var(--bg);padding:calc(env(safe-area-inset-top) + 10px) 14px 6px;display:flex;align-items:center;gap:8px}
+.tt{flex:1;min-width:0}.tn{font-weight:700;font-size:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ss{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ss.offline,.ss.error{color:var(--warn)}
+.pill{font-size:11px;font-weight:700;border-radius:999px;padding:3px 8px;background:var(--accent);color:var(--accent-ink)}
+.iconbtn{width:38px;height:38px;border-radius:10px;border:1px solid var(--line);background:var(--card);display:inline-flex;align-items:center;justify-content:center;padding:0}
+.iconbtn svg{width:20px;height:20px}
+body.busy .iconbtn[data-act=refresh] svg{animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.toolbar{display:flex;align-items:center;gap:8px;padding:4px 12px}
+.navbtn{width:40px;height:38px;border-radius:10px;border:1px solid var(--line);background:var(--card);font-size:22px;line-height:1;padding:0}
+.ptitle{flex:1;text-align:center;font-weight:700;font-size:17px}
+.todaybtn{border:1px solid var(--line);background:var(--card);border-radius:10px;height:38px;padding:0 12px;font-weight:600}
+.seg{display:flex;background:var(--line);border-radius:11px;padding:3px;margin:8px 12px 4px}
+.seg button{flex:1;border:0;background:transparent;padding:7px 0;border-radius:8px;font-weight:600}
+.seg button[aria-pressed=true]{background:var(--card);box-shadow:var(--shadow);color:var(--accent)}
+.filters{display:flex;gap:6px;overflow-x:auto;padding:6px 12px;scrollbar-width:none}
+.filters::-webkit-scrollbar{display:none}
+.chipbtn{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:6px 11px;white-space:nowrap;display:inline-flex;gap:6px;align-items:center;font-size:13.5px}
+.chipbtn[aria-pressed=false]{opacity:.4;text-decoration:line-through}
+.sw{width:10px;height:10px;border-radius:50%;background:var(--c);flex:none;display:inline-block}
+select,input,textarea{font:inherit;color:var(--text);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px;width:100%;min-height:42px}
+textarea{min-height:90px}
+input[type=color]{padding:3px;height:42px}
+.selchip{width:auto;border-radius:999px;padding:6px 10px;min-height:0;font-size:13.5px;flex:none}
+.fld{display:block;margin:10px 0;font-size:13.5px;color:var(--muted)}
+.fld>input,.fld>select,.fld>textarea{margin-top:4px}
+.fld .hint{display:block;font-size:12px;margin-top:4px}
+.checks{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.checks label{display:inline-flex;gap:6px;align-items:center;border:1px solid var(--line);border-radius:999px;padding:6px 10px;color:var(--text)}
+.checks input{width:auto;min-height:0;margin:0}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:0;border-radius:11px;background:var(--accent);color:var(--accent-ink);font-weight:700;padding:11px 16px;min-height:44px}
+.btn.ghost{background:var(--card);color:var(--text);border:1px solid var(--line)}
+.btn.danger{background:var(--danger);color:#fff}
+.btn.textdanger{background:transparent;color:var(--danger);border:1px solid var(--line)}
+.btn.sm{min-height:34px;padding:6px 11px;font-size:13.5px;border-radius:9px}
+.btn.full{width:100%}
+.btns{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;margin-top:12px}
+.btns .grow{margin-inline-end:auto}
+body.busy .btn[type=submit],body.busy .needsnet{opacity:.5;pointer-events:none}
+.card{background:var(--card);border-radius:14px;box-shadow:var(--shadow);border:1px solid var(--line)}
+.pad{padding:16px}
+.wrap{padding:0 12px}
+/* month */
+.mgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px;padding:6px 8px}
+.dow{text-align:center;font-size:11.5px;color:var(--muted);padding:2px 0;font-weight:600}
+.mcell{min-height:66px;border:0;border-radius:10px;background:var(--card);padding:3px;text-align:start;display:flex;flex-direction:column;gap:2px;position:relative;overflow:hidden;box-shadow:var(--shadow)}
+.mcell.out{opacity:.35}
+.mcell.we{background:var(--weekend);box-shadow:none}
+.mcell.hol{background:var(--holiday)}
+.dn{font-size:12.5px;font-weight:600;min-width:21px;height:21px;flex:none;display:inline-flex;align-items:center;justify-content:center;border-radius:999px}
+.today .dn{background:var(--accent);color:var(--accent-ink)}
+.ctop{display:flex;align-items:center;justify-content:space-between;gap:1px}
+.cnt{font-size:10px;font-weight:700;background:var(--text);color:var(--bg);border-radius:999px;padding:1px 4px;line-height:1.35;flex:none}
+.inis{display:flex;flex-wrap:wrap;gap:2px;margin-top:auto}
+.ini{width:18px;height:18px;border-radius:50%;background:var(--c);color:#fff;font-size:8.5px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;letter-spacing:-.2px}
+.ini.half{background:linear-gradient(135deg,var(--c) 50%,transparent 50%);color:var(--text);border:1.5px solid var(--c)}
+.more{font-size:10px;color:var(--muted);align-self:center}
+.hname{font-size:9px;color:var(--holiday-ink);line-height:1.1;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;margin-top:auto}
+@media (min-width:600px){.mcell{min-height:84px}.ini{width:22px;height:22px;font-size:10px}}
+/* week */
+.wlist{padding:6px 12px;display:flex;flex-direction:column;gap:6px}
+.wrow{display:flex;gap:10px;padding:10px;border:0;border-radius:12px;background:var(--card);text-align:start;box-shadow:var(--shadow);width:100%;align-items:flex-start}
+.wrow.we{background:var(--weekend);box-shadow:none}.wrow.hol{background:var(--holiday)}
+.wdate{width:46px;flex:none;text-align:center}
+.wdate .d1{font-size:11.5px;color:var(--muted);font-weight:600}.wdate .d2{font-size:20px;font-weight:700}
+.today .wdate .d2{color:var(--accent)}
+.wbody{flex:1;min-width:0;display:flex;flex-wrap:wrap;gap:4px;align-items:center;min-height:36px}
+.wcnt{flex:none;font-weight:700;font-size:13px;background:var(--text);color:var(--bg);border-radius:999px;padding:2px 9px;align-self:center}
+.tag{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:4px 10px;background:var(--card);background:color-mix(in srgb,var(--c) 16%,var(--card));border:1px solid var(--c);font-size:13px}
+.free{color:var(--muted);font-size:13px}
+.holtag{color:var(--holiday-ink);font-weight:600;font-size:13px}
+/* year */
+.ygrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:6px 12px}
+@media (min-width:560px){.ygrid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.mini{padding:8px}
+.mini .mt{border:0;background:none;font-weight:700;padding:2px 0 6px;font-size:14px;color:var(--accent)}
+.mini .g{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:2px}
+.mini .dw{font-size:8.5px;text-align:center;color:var(--muted)}
+.yc{aspect-ratio:1;border:0;border-radius:4px;font-size:9px;padding:0;background:transparent;display:flex;align-items:center;justify-content:center;line-height:1}
+.yc.we{color:var(--muted);background:var(--weekend)}
+.yc.hol{background:var(--holiday);color:var(--holiday-ink);font-weight:700}
+.yc.h{background:rgba(var(--heat),var(--a));color:#fff;font-weight:700}
+.yc.today{outline:2px solid var(--accent);outline-offset:-1px}
+.yc.blank{visibility:hidden}
+.legend{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:8px 14px;font-size:12px;color:var(--muted)}
+.legend .lg{display:inline-flex;gap:5px;align-items:center}
+.lgbox{width:12px;height:12px;border-radius:3px;display:inline-block;background:var(--b)}
+.heatbar{display:inline-flex;gap:2px}.heatbar i{width:12px;height:12px;border-radius:3px;background:rgba(var(--heat),var(--a))}
+/* nav */
+.bnav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom);z-index:6}
+.bnav .in{display:flex;max-width:760px;margin:0 auto}
+.bnav button{flex:1;border:0;background:none;padding:9px 0 7px;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11.5px;font-weight:600}
+.bnav svg{width:22px;height:22px}
+.bnav button[aria-current=page]{color:var(--accent)}
+.fab{position:fixed;inset-inline-end:max(16px,calc(50% - 364px));bottom:calc(80px + env(safe-area-inset-bottom));width:58px;height:58px;border-radius:50%;background:var(--accent);color:var(--accent-ink);border:0;font-size:32px;line-height:1;box-shadow:0 6px 16px rgba(0,0,0,.25);z-index:6}
+/* sheets */
+#modal-root,#dialog-root{position:fixed;inset:0;display:none;z-index:20}
+#dialog-root{z-index:30}
+#modal-root.open,#dialog-root.open{display:block}
+.backdrop{position:absolute;inset:0;background:rgba(0,0,0,.45)}
+.sheet{position:absolute;left:0;right:0;bottom:0;margin:0 auto;max-width:760px;max-height:90vh;overflow:auto;background:var(--card);border-radius:18px 18px 0 0;padding:14px 16px calc(18px + env(safe-area-inset-bottom));animation:up .18s ease-out}
+.sheet h3{margin-top:4px}
+@keyframes up{from{transform:translateY(30px);opacity:.4}}
+.dialog{position:absolute;left:16px;right:16px;top:50%;transform:translateY(-50%);margin:0 auto;max-width:420px;background:var(--card);border-radius:16px;padding:18px}
+.dialog p{margin:0 0 8px}
+.grab{width:40px;height:5px;border-radius:5px;background:var(--line);margin:0 auto 10px}
+.lrow{display:flex;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.lrow:last-child{border-bottom:0}
+.lrow .main{flex:1;min-width:0}
+.lrow .nm{font-weight:600}
+.lrow .sub{font-size:12.5px;color:var(--muted)}
+.big{font-size:26px;font-weight:800}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.presets{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
+.tablewrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:start;white-space:nowrap}
+th{font-size:12px;color:var(--muted);font-weight:700}
+td.n,th.n{text-align:end}
+tfoot td{font-weight:700;border-bottom:0}
+.sec{margin:12px 0;padding:4px 14px}
+.sec>h3{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.kv{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px}
+.kv:last-child{border-bottom:0}
+.kv span:last-child{text-align:end;color:var(--muted);word-break:break-all}
+.tagsm{font-size:11px;border:1px solid var(--line);border-radius:999px;padding:1px 7px;color:var(--muted);margin-inline-start:6px}
+.screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.screen .card{width:100%;max-width:420px}
+.logo{width:84px;height:84px;margin:0 auto 4px;display:block}
+.screen h1{text-align:center}.screen .tag-line{text-align:center;margin-top:-4px}
+.blogo{width:34px;height:34px;flex:none}
+.gx{background:linear-gradient(135deg,#ff3cac 0%,#8b5cf6 50%,#22d3ee 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.brand{font-weight:800;font-size:19px;letter-spacing:-.2px}
+#toast{position:fixed;left:50%;bottom:calc(150px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--text);color:var(--bg);padding:10px 16px;border-radius:12px;font-size:14px;max-width:88vw;opacity:0;pointer-events:none;transition:opacity .2s;z-index:40;text-align:center}
+#toast.show{opacity:.95}
+.spin{width:28px;height:28px;border:3px solid var(--line);border-top-color:var(--accent);border-radius:50%;animation:spin 1s linear infinite;margin:20px auto}
+.note{font-size:12.5px;color:var(--muted);padding:2px 14px}
+.yearchips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px}
+:root{--g1:#e8f1e4;--g2:#f3efe2;--g3:#e2eeea;--b1:rgba(150,190,140,.45);--b2:rgba(230,210,160,.38);--b3:rgba(140,195,180,.35);
+ --accent:#5b8c5a;--accent2:#3f8f86;--accent-ink:#fff;--grad:linear-gradient(135deg,var(--accent) 0%,var(--accent2) 100%);
+ --bg:transparent;--card:rgba(255,255,255,.66);--solid:#f8faf5;--text:#26352a;--muted:#687a6c;--line:rgba(255,255,255,.78);--hair:rgba(38,53,42,.08);
+ --weekend:rgba(255,255,255,.28);--holiday:rgba(255,214,200,.65);--holiday-ink:#b05a3c;--heat:91,140,90;--danger:#c2412d;--ok:#3f8f5a;--warn:#c98a1b;
+ --shadow:0 4px 16px rgba(60,90,60,.08),0 1px 2px rgba(60,90,60,.06);--glow:0 8px 22px rgba(91,140,90,.33)}
+@media (prefers-color-scheme: dark){:root{--g1:#0e1a14;--g2:#14201c;--g3:#1b1f17;--b1:rgba(91,140,90,.30);--b2:rgba(63,143,134,.24);--b3:rgba(190,170,110,.14);
+ --accent:#8fc48e;--accent2:#5fbfb1;--accent-ink:#0b1a10;--card:rgba(255,255,255,.07);--solid:#16241d;--text:#e4eee6;--muted:#93a89a;--line:rgba(255,255,255,.10);--hair:rgba(255,255,255,.08);
+ --weekend:rgba(255,255,255,.03);--holiday:rgba(255,140,110,.16);--holiday-ink:#ffab95;--heat:143,196,142;--danger:#ff8a75;--shadow:none;--glow:0 8px 24px rgba(143,196,142,.28)}}
+html{background:linear-gradient(160deg,var(--g1) 0%,var(--g2) 50%,var(--g3) 100%) fixed;min-height:100%}
+html,body{background-color:transparent}
+body{background:transparent}
+body::before{content:"";position:fixed;inset:-20%;z-index:-1;pointer-events:none;
+ background:radial-gradient(38% 30% at 15% 20%,var(--b1),transparent 70%),radial-gradient(40% 32% at 90% 35%,var(--b2),transparent 70%),radial-gradient(45% 35% at 40% 95%,var(--b3),transparent 70%);
+ filter:blur(10px);animation:drift 18s ease-in-out infinite alternate}
+@keyframes drift{to{transform:translate3d(4%,-3%,0) scale(1.06)}}
+/* glass surfaces */
+.card,.mcell,.wrow,.iconbtn,.navbtn,.todaybtn,.chipbtn,.btn.ghost,select,input,textarea,.checks label{background:var(--card);border-color:var(--line);-webkit-backdrop-filter:blur(14px) saturate(1.3);backdrop-filter:blur(14px) saturate(1.3)}
+.card{border-radius:18px;box-shadow:var(--shadow)}
+.mcell{border-radius:12px;box-shadow:var(--shadow);border:1px solid var(--line)}
+.mcell.we,.wrow.we{background:var(--weekend);border-color:transparent}
+.mcell.hol,.wrow.hol{background:var(--holiday)}
+.topbar{background:transparent;-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
+.iconbtn,.navbtn,.todaybtn{border-radius:14px;box-shadow:var(--shadow)}
+.seg{background:rgba(255,255,255,.35);border:1px solid var(--line);border-radius:14px;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+@media (prefers-color-scheme: dark){.seg{background:rgba(255,255,255,.05)}}
+.seg button{border-radius:11px;transition:color .25s,background .25s,box-shadow .25s,transform .15s}
+.seg button[aria-pressed=true]{background:var(--grad);color:var(--accent-ink);box-shadow:var(--glow)}
+.btn{background:var(--grad);border-radius:14px;box-shadow:var(--glow);background-size:160% 160%;transition:transform .15s cubic-bezier(.3,1.6,.5,1),box-shadow .2s,background-position .5s}
+.btn:hover{background-position:100% 0}
+.btn.ghost{box-shadow:var(--shadow);color:var(--text)}
+.today .dn{background:var(--grad);box-shadow:var(--glow)}
+.today .wdate .d2{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.cnt,.wcnt{background:var(--grad);color:#fff}
+.pill{background:var(--grad)}
+.ini{box-shadow:0 2px 5px rgba(0,0,0,.12);animation:pop .4s cubic-bezier(.3,1.5,.5,1) both}
+.mini .mt{color:var(--accent)}
+.yc.today{outline-color:var(--accent)}
+.bnav{background:var(--card);border-top:1px solid var(--line);-webkit-backdrop-filter:blur(18px) saturate(1.4);backdrop-filter:blur(18px) saturate(1.4);margin:0 10px calc(10px + env(safe-area-inset-bottom));border-radius:22px;box-shadow:0 10px 30px rgba(30,70,90,.15);border:1px solid var(--line);padding-bottom:0}
+.bnav button{position:relative;transition:color .25s}
+.bnav button[aria-current=page]{color:var(--accent)}
+.bnav button[aria-current=page]::before{content:"";position:absolute;top:5px;width:46px;height:30px;border-radius:12px;background:color-mix(in srgb,var(--accent) 14%,transparent);z-index:-1;animation:pillin .35s cubic-bezier(.3,1.5,.5,1)}
+.bnav button[aria-current=page] svg{animation:bounce .45s cubic-bezier(.3,1.6,.5,1)}
+.fab{background:var(--grad);box-shadow:var(--glow),0 0 0 6px color-mix(in srgb,var(--accent) 14%,transparent);bottom:calc(96px + env(safe-area-inset-bottom));transition:transform .25s cubic-bezier(.3,1.6,.5,1);animation:breathe 3.2s ease-in-out infinite}
+.fab:active{transform:rotate(90deg) scale(.9)}
+.backdrop{background:rgba(20,40,55,.30);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);animation:fade .25s ease-out}
+.sheet,.dialog{background:var(--solid);background:color-mix(in srgb,var(--solid) 92%,transparent);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border-radius:26px 26px 0 0;animation:sheetup .42s cubic-bezier(.2,1.2,.35,1)}
+.dialog{border-radius:22px}
+.grab{background:color-mix(in srgb,var(--accent) 35%,transparent)}
+.tag{border-width:0;background:color-mix(in srgb,var(--c) 20%,rgba(255,255,255,.6));box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--c) 45%,transparent)}
+#toast{background:var(--grad);color:#fff;border-radius:16px;box-shadow:var(--glow);transform:translate(-50%,12px);transition:opacity .25s,transform .35s cubic-bezier(.3,1.5,.5,1)}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+.gx{background:linear-gradient(135deg,#ff6fb5 0%,#8b7cf6 50%,#3fd0e0 100%);-webkit-background-clip:text;background-clip:text}
+.logo{animation:float 4s ease-in-out infinite;filter:drop-shadow(0 12px 18px rgba(80,120,200,.25))}
+/* view entrance */
+.mgrid .mcell{animation:rise .45s cubic-bezier(.2,.9,.3,1) both;animation-delay:calc(var(--i,0)*12ms)}
+.wlist .wrow,.ygrid .mini,.sec,.card{animation:rise .45s cubic-bezier(.2,.9,.3,1) both}
+/* press feedback */
+button,.btn,.mcell,.wrow,.chipbtn,.yc{transition:transform .15s cubic-bezier(.3,1.6,.5,1)}
+button:active,.mcell:active,.wrow:active{transform:scale(.94)}
+.rip{position:absolute;border-radius:50%;pointer-events:none;background:color-mix(in srgb,var(--accent) 35%,transparent);transform:scale(0);animation:ripple .6s ease-out forwards}
+@keyframes ripple{to{transform:scale(2.6);opacity:0}}
+@keyframes rise{from{opacity:0;transform:translateY(10px) scale(.98)}}
+@keyframes pop{from{transform:scale(.3);opacity:0}}
+@keyframes bounce{40%{transform:translateY(-4px) scale(1.12)}}
+@keyframes pillin{from{transform:scale(.5);opacity:0}}
+@keyframes sheetup{from{transform:translateY(60%);opacity:.3}}
+@keyframes fade{from{opacity:0}}
+@keyframes float{50%{transform:translateY(-6px) rotate(-2deg)}}
+@keyframes breathe{50%{box-shadow:var(--glow),0 0 0 11px color-mix(in srgb,var(--accent) 8%,transparent)}}
+@media (prefers-reduced-motion: reduce){*,*::before{animation:none!important;transition:none!important}}
+
+/* about */
+.ahero{text-align:center;padding:22px 16px 18px;margin:8px 12px}
+.ahero .logo{width:92px;height:92px}
+.ahero .an{font-size:30px;font-weight:800;letter-spacing:-.4px;margin:4px 0 0}
+.ahero .ver{display:inline-block;margin-top:8px;font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;background:color-mix(in srgb,var(--accent) 16%,transparent);color:var(--accent)}
+.maker{display:flex;gap:14px;align-items:center;margin:10px 12px;padding:16px}
+.mav{width:56px;height:56px;border-radius:50%;flex:none;background:var(--grad);color:#fff;font-weight:800;font-size:20px;display:flex;align-items:center;justify-content:center;box-shadow:var(--glow)}
+.maker .lb{font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.maker .mn{font-size:19px;font-weight:800}
+.maker .md{color:var(--muted);font-size:14px}
+.howto{margin:10px 12px;padding:4px 0}
+.howto>h3{margin:12px 16px 6px}
+.howto details{border-top:1px solid var(--hair)}
+.howto summary{list-style:none;display:flex;align-items:center;gap:12px;padding:13px 16px;cursor:pointer;font-weight:700}
+.howto summary::-webkit-details-marker{display:none}
+.howto summary .hi{width:32px;height:32px;border-radius:10px;flex:none;display:flex;align-items:center;justify-content:center;background:color-mix(in srgb,var(--accent) 15%,transparent);font-size:17px}
+.howto summary::after{content:"";margin-inline-start:auto;width:8px;height:8px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg);transition:transform .3s cubic-bezier(.3,1.5,.5,1)}
+.howto details[open] summary::after{transform:rotate(-135deg)}
+.howto .hb{padding:0 16px 14px 60px;font-size:14px;color:var(--text);animation:rise .35s cubic-bezier(.2,.9,.3,1)}
+.howto .hb ul,.howto .hb ol{margin:0;padding-inline-start:18px}.howto .hb li{margin:5px 0}
+.howto .hb b{color:var(--accent)}
+.afoot{text-align:center;font-size:12.5px;color:var(--muted);padding:6px 20px 18px}
+
+</style>
+</head>
+<body>
+<div id="app"><div class="spin"></div></div>
+<div id="modal-root"></div>
+<div id="dialog-root"></div>
+<div id="toast" role="status" aria-live="polite"></div>
+<script>
+'use strict';
+/* Team Leave Tracker — runs entirely in the browser.
+   Shared data = one encrypted file (data.enc.json) in the same GitHub repository.
+   Team passcode decrypts it; an admin "edit key" (GitHub token) is needed to save. */
+const APP_VERSION = '1.2.0';
+const LOGO = 'data:image/png;base64,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';
+const BRAND = 'Rela<span class="gx">X</span>';
+const DATA_FILE = 'data.enc.json';
+const KDF_ITER = 310000;
+const COMMIT_MSG = 'Update leave data'; // never put names in commit messages (they are public)
+const K = {pass:'lt.pass', token:'lt.token', cache:'lt.cache', repo:'lt.repo', view:'lt.view', filters:'lt.filters'};
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const MON3 = MONTHS.map(m => m.slice(0,3));
+const DOW = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const DEFAULT_COLORS = ['#3b82f6','#f59e0b','#10b981','#8b5cf6','#ef4444','#14b8a6','#ec4899','#64748b'];
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+const pad = n => String(n).padStart(2, '0');
+const ymd = d => d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+const pd = s => { const p = String(s).split('-').map(Number); return new Date(p[0], p[1] - 1, p[2]); };
+const addD = (d, n) => new Date(d.getFullYear(), d.getMonth(), d.getDate() + n);
+const isDate = s => /^\d{4}-\d{2}-\d{2}$/.test(s || '') && ymd(pd(s)) === s;
+const fmtD = s => { const d = pd(s); return DOW[d.getDay()] + ' ' + d.getDate() + ' ' + MON3[d.getMonth()] + ' ' + d.getFullYear(); };
+const fmtS = s => { const d = pd(s); return d.getDate() + ' ' + MON3[d.getMonth()]; };
+const fmtRange = (a, b) => a === b ? fmtD(a) : (fmtS(a) + ' – ' + fmtS(b) + ' ' + pd(b).getFullYear());
+const fmtNum = n => { const w = Math.floor(n + 1e-9), h = n - w > 0.25; return (w || !h ? String(w) : '') + (h ? '½' : ''); };
+const safeColor = c => /^#[0-9a-f]{6}$/i.test(c || '') ? c : '#64748b';
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const initials = name => { const p = String(name || '?').trim().split(/\s+/); return ((p[0] || '?')[0] + (p.length > 1 ? p[p.length - 1][0] : (p[0][1] || ''))).toUpperCase(); };
+const te = new TextEncoder(), td = new TextDecoder();
+const b64e = u8 => { let s = ''; for (let i = 0; i < u8.length; i += 0x8000) s += String.fromCharCode.apply(null, u8.subarray(i, i + 0x8000)); return btoa(s); };
+const b64d = s => Uint8Array.from(atob(String(s).replace(/\s/g, '')), c => c.charCodeAt(0));
+function errCode(msg, code) { const e = new Error(msg); e.code = code; return e; }
+
+const ICON = {
+  cal: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16.5" rx="2.5"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4"/></svg>',
+  chart: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>',
+  gear: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>',
+  info: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M12 11v6M12 7.5v.01"/></svg>',
+  refresh: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.6-6.4L21 8"/><path d="M21 3v5h-5"/></svg>'
+};
+
+/* ---------------- state ---------------- */
+const state = {
+  repo: null, token: '', pass: '', data: null, sha: null,
+  tab: 'cal', view: localStorage.getItem(K.view) || 'month', cursor: new Date(),
+  filters: loadFilters(), busy: false, sync: {status: 'idle', at: 0, msg: ''},
+  rep: null, holYear: new Date().getFullYear(), pendingRemote: null, onSheetClose: null
+};
+let idx = {days: new Map(), hol: new Map(), m: new Map(), t: new Map()};
+function loadFilters() { try { const f = JSON.parse(localStorage.getItem(K.filters)); if (f && f.member && Array.isArray(f.hidden)) return f; } catch (e) {} return {member: 'all', hidden: []}; }
+function saveFilters() { localStorage.setItem(K.filters, JSON.stringify(state.filters)); }
+const isAdmin = () => !!state.token;
+const memberById = id => idx.m.get(id);
+const typeById = id => idx.t.get(id);
+const filtersOn = () => state.filters.member !== 'all' || state.filters.hidden.length > 0;
+
+/* ---------------- crypto ---------------- */
+const keyCache = new Map();
+async function getKey(pass, saltB64, iter) {
+  const id = pass + '|' + saltB64 + '|' + iter;
+  if (keyCache.has(id)) return keyCache.get(id);
+  const base = await crypto.subtle.importKey('raw', te.encode(pass), 'PBKDF2', false, ['deriveKey']);
+  const key = await crypto.subtle.deriveKey({name: 'PBKDF2', salt: b64d(saltB64), iterations: iter, hash: 'SHA-256'}, base, {name: 'AES-GCM', length: 256}, false, ['encrypt', 'decrypt']);
+  keyCache.set(id, key); return key;
+}
+async function encryptData(obj, pass, saltB64, iter) {
+  iter = iter || KDF_ITER;
+  saltB64 = saltB64 || b64e(crypto.getRandomValues(new Uint8Array(16)));
+  const key = await getKey(pass, saltB64, iter);
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const ct = new Uint8Array(await crypto.subtle.encrypt({name: 'AES-GCM', iv}, key, te.encode(JSON.stringify(obj))));
+  return {format: 'team-leave-tracker', v: 1, kdf: 'PBKDF2-SHA256', iter, salt: saltB64, iv: b64e(iv), ct: b64e(ct)};
+}
+async function decryptData(env, pass) {
+  if (!env || env.format !== 'team-leave-tracker') throw errCode('The data file is not a leave tracker file.', 'format');
+  const key = await getKey(pass, env.salt, env.iter || KDF_ITER);
+  let pt;
+  try { pt = await crypto.subtle.decrypt({name: 'AES-GCM', iv: b64d(env.iv)}, key, b64d(env.ct)); }
+  catch (e) { throw errCode('That passcode is not correct.', 'badpass'); }
+  return normalize(JSON.parse(td.decode(pt)));
+}
+
+/* ---------------- data model ---------------- */
+function normalize(d) {
+  d = d || {};
+  d.teamName = d.teamName || 'Team Leave Tracker';
+  d.settings = Object.assign({weekStart: 1, weekend: [0, 6]}, d.settings || {});
+  ['members', 'types', 'holidays', 'entries'].forEach(k => { if (!Array.isArray(d[k])) d[k] = []; });
+  d.holidays.sort((a, b) => a.date < b.date ? -1 : 1);
+  return d;
+}
+function starterData(teamName, people) {
+  const names = (people && people.length) ? people : ['Jaydeep', 'Team member 2', 'Team member 3'];
+  return normalize({
+    schema: 1, teamName: teamName || 'Team Leave Tracker', rev: 0, created: new Date().toISOString(),
+    settings: {weekStart: 1, weekend: [0, 6]},
+    members: names.map(n => ({id: uid(), name: n, active: true})),
+    types: [
+      {id: 'leave', name: 'Leave', color: '#5b8def', weight: 1, half: false},
+      {id: 'half', name: 'Half day', color: '#f2a65a', weight: 0.5, half: true},
+      {id: 'summer', name: 'Summer Hours', color: '#3cbfae', weight: 0.5, half: false}
+    ],
+    holidays: [
+      {date: '2026-12-25', name: 'Christmas (sample – check list)'},
+      {date: '2027-01-26', name: 'Republic Day (sample – check list)'},
+      {date: '2027-08-15', name: 'Independence Day (sample – check list)'},
+      {date: '2027-10-02', name: 'Gandhi Jayanti (sample – check list)'},
+      {date: '2027-12-25', name: 'Christmas (sample – check list)'}
+    ],
+    entries: []
+  });
+}
+function isWeekend(k) { return state.data.settings.weekend.includes(pd(k).getDay()); }
+function isWorking(k) { return !isWeekend(k) && !idx.hol.has(k); }
+function rebuildIndex() {
+  const d = state.data, f = state.filters;
+  idx = {days: new Map(), hol: new Map(d.holidays.map(h => [h.date, h.name])), m: new Map(d.members.map(m => [m.id, m])), t: new Map(d.types.map(t => [t.id, t]))};
+  if (f.member !== 'all' && !idx.m.has(f.member)) f.member = 'all';
+  f.hidden = f.hidden.filter(id => idx.t.has(id));
+  for (const e of d.entries) {
+    if (f.member !== 'all' && e.memberId !== f.member) continue;
+    if (f.hidden.includes(e.typeId)) continue;
+    if (!idx.m.has(e.memberId) || !isDate(e.start) || !isDate(e.end)) continue;
+    let cur = pd(e.start); const end = pd(e.end);
+    for (let i = 0; i < 400 && cur <= end; i++, cur = addD(cur, 1)) {
+      const k = ymd(cur); if (!isWorking(k)) continue;
+      if (!idx.days.has(k)) idx.days.set(k, []);
+      idx.days.get(k).push(e);
+    }
+  }
+}
+const dayList = k => idx.days.get(k) || [];
+function weightOf(e) { const t = typeById(e.typeId); return t ? Number(t.weight) : 1; }
+function perMember(k) { const per = new Map(); for (const e of dayList(k)) per.set(e.memberId, Math.min(1, (per.get(e.memberId) || 0) + weightOf(e))); return per; }
+function dayCount(k) { let s = 0; perMember(k).forEach(v => s += v); return s; }
+function peopleOn(k) { return new Set(dayList(k).map(e => e.memberId)).size; }
+function workingDays(a, b) { let n = 0, cur = pd(a); const end = pd(b); for (let i = 0; i < 800 && cur <= end; i++, cur = addD(cur, 1)) if (isWorking(ymd(cur))) n++; return n; }
+function typeLabel(e) { const t = typeById(e.typeId); return (t ? t.name : 'Leave') + (e.part ? ' (' + e.part + ')' : ''); }
+
+/* ---------------- GitHub storage ---------------- */
+function detectRepo() {
+  const saved = localStorage.getItem(K.repo);
+  if (saved && saved.includes('/')) { const [owner, repo] = saved.split('/'); return {owner, repo}; }
+  const h = location.hostname;
+  if (h.endsWith('.github.io')) {
+    const owner = h.split('.')[0];
+    const seg = location.pathname.split('/').filter(Boolean)[0];
+    return {owner, repo: (seg && !seg.includes('.')) ? seg : h};
+  }
+  return null;
+}
+const repoLabel = () => state.repo ? state.repo.owner + '/' + state.repo.repo : '';
+const apiBase = () => 'https://api.github.com/repos/' + encodeURIComponent(state.repo.owner) + '/' + encodeURIComponent(state.repo.repo);
+function ghHeaders(tok) { const h = {'Accept': 'application/vnd.github+json'}; if (tok) h.Authorization = 'Bearer ' + tok; return h; }
+
+async function fetchRemote() {
+  const tok = state.token;
+  let apiStatus = 0;
+  try {
+    const r = await fetch(apiBase() + '/contents/' + DATA_FILE, {headers: ghHeaders(tok), cache: 'no-store'});
+    apiStatus = r.status;
+    if (r.status === 200) {
+      const j = await r.json();
+      let text;
+      if (j.content) text = td.decode(b64d(j.content));
+      else { const r2 = await fetch(j.download_url + '?t=' + Date.now(), {cache: 'no-store'}); text = await r2.text(); }
+      return {env: JSON.parse(text), sha: j.sha};
+    }
+    if (r.status === 404) return {notFound: true};
+    if (r.status === 401 && tok) throw errCode('The admin edit key on this phone is invalid or has expired. Replace it in Settings.', 'badtoken');
+  } catch (e) { if (e.code === 'badtoken') throw e; }
+  // Fallbacks (e.g. GitHub's hourly limit for viewers was reached)
+  let nf = false;
+  const urls = ['https://raw.githubusercontent.com/' + state.repo.owner + '/' + state.repo.repo + '/HEAD/' + DATA_FILE + '?t=' + Date.now(), './' + DATA_FILE + '?t=' + Date.now()];
+  for (const u of urls) {
+    try { const r = await fetch(u, {cache: 'no-store'}); if (r.ok) return {env: await r.json(), sha: null}; if (r.status === 404) nf = true; } catch (e) {}
+  }
+  if (nf && apiStatus !== 403 && apiStatus !== 429) return {notFound: true};
+  throw errCode("Can't reach GitHub right now. Check your internet connection.", 'offline');
+}
+async function putRemote(env, sha, msg) {
+  const body = {message: msg || COMMIT_MSG, content: b64e(te.encode(JSON.stringify(env)))};
+  if (sha) body.sha = sha;
+  let r;
+  try { r = await fetch(apiBase() + '/contents/' + DATA_FILE, {method: 'PUT', headers: Object.assign(ghHeaders(state.token), {'Content-Type': 'application/json'}), body: JSON.stringify(body)}); }
+  catch (e) { throw errCode("Can't reach GitHub right now. Your change was not saved.", 'offline'); }
+  if (r.status === 200 || r.status === 201) { const j = await r.json(); return j.content.sha; }
+  if (r.status === 409 || r.status === 422) throw errCode('conflict', 'conflict');
+  if (r.status === 401) throw errCode('The admin edit key on this phone is invalid or has expired. Replace it in Settings.', 'badtoken');
+  if (r.status === 403 || r.status === 404) throw errCode('This edit key is not allowed to save here. It needs "Contents: Read and write" access to ' + repoLabel() + '.', 'noaccess');
+  throw errCode('GitHub returned an error (' + r.status + '). Your change was not saved.', 'http');
+}
+function applyData(d, env, sha) {
+  state.data = d; state.sha = sha;
+  try { localStorage.setItem(K.cache, JSON.stringify(env)); } catch (e) {}
+  state.sync = {status: 'ok', at: Date.now(), msg: ''};
+  rebuildIndex(); render();
+}
+/* Re-reads the latest file, applies the change, saves; retries if someone else saved first. */
+async function commit(mutate, opts) {
+  opts = opts || {};
+  if (!isAdmin()) { toast('Only admins can make changes. Add the admin edit key in Settings.'); return false; }
+  if (state.busy) { toast('Please wait – still saving…'); return false; }
+  setBusy(true); toast('Saving…', 15000);
+  try {
+    for (let attempt = 0; attempt < 4; attempt++) {
+      const rem = await fetchRemote();
+      if (rem.notFound) throw new Error('The shared data file was not found on GitHub.');
+      const data = await decryptData(rem.env, state.pass);
+      if (mutate(data) === false) { toast(''); return false; }
+      data.rev = (data.rev || 0) + 1; data.updated = new Date().toISOString();
+      const pass = opts.newPass || state.pass;
+      const env = opts.newPass ? await encryptData(data, pass) : await encryptData(data, pass, rem.env.salt, rem.env.iter || KDF_ITER);
+      try {
+        const sha = await putRemote(env, rem.sha);
+        if (opts.newPass) { state.pass = pass; localStorage.setItem(K.pass, pass); }
+        applyData(data, env, sha); toast(opts.done || 'Saved'); return true;
+      } catch (e) { if (e.code === 'conflict') { await sleep(800 * (attempt + 1)); continue; } throw e; }
+    }
+    throw new Error('Someone else is saving at the same moment. Please try again.');
+  } catch (e) { handleErr(e); return false; }
+  finally { setBusy(false); }
+}
+function handleErr(e) {
+  if (e && e.code === 'badpass') { forgetPass(); renderLock('The team passcode has changed. Enter the new passcode.'); return; }
+  toast((e && e.message) || 'Something went wrong.', 5000);
+}
+function forgetPass() { localStorage.removeItem(K.pass); state.pass = ''; state.data = null; closeSheet(); }
+async function sync(manual) {
+  if (!state.repo || !state.pass) return;
+  state.sync.status = 'syncing'; updateSyncLabel(); setBusy(true);
+  try {
+    const rem = await fetchRemote();
+    if (rem.notFound) { if (!state.data) return renderSetup(); state.sync = {status: 'error', at: state.sync.at, msg: 'Shared data file not found'}; updateSyncLabel(); return; }
+    const d = await decryptData(rem.env, state.pass);
+    applyData(d, rem.env, rem.sha);
+    if (manual) toast('Up to date');
+  } catch (e) {
+    if (e.code === 'badpass') return handleErr(e);
+    state.sync.status = 'offline'; state.sync.msg = e.message;
+    if (!state.data) renderOffline(); else { updateSyncLabel(); if (manual) toast(e.message, 4000); }
+  } finally { setBusy(false); }
+}
+
+/* ---------------- UI helpers ---------------- */
+let toastTimer = null;
+function toast(msg, ms) {
+  const t = $('#toast'); clearTimeout(toastTimer);
+  if (!msg) { t.classList.remove('show'); return; }
+  t.textContent = msg; t.classList.add('show');
+  toastTimer = setTimeout(() => t.classList.remove('show'), ms || 2200);
+}
+function setBusy(b) { state.busy = b; document.body.classList.toggle('busy', b); }
+function relTime(ts) {
+  if (!ts) return '';
+  const s = Math.round((Date.now() - ts) / 1000);
+  if (s < 60) return 'just now'; if (s < 3600) return Math.floor(s / 60) + ' min ago';
+  const d = new Date(ts); return pad(d.getHours()) + ':' + pad(d.getMinutes()) + ', ' + d.getDate() + ' ' + MON3[d.getMonth()];
+}
+function syncText() {
+  const s = state.sync;
+  if (s.status === 'syncing') return 'Checking for updates…';
+  if (s.status === 'offline') return 'Offline – showing saved copy';
+  if (s.status === 'error') return esc(s.msg);
+  return 'Updated ' + relTime(s.at);
+}
+function updateSyncLabel() { const el = $('#syncl'); if (el) { el.parentNode.className = 'ss ' + state.sync.status; el.innerHTML = syncText(); } }
+function openSheet(html, onMount) {
+  const r = $('#modal-root');
+  r.innerHTML = '<div class="backdrop" data-act="close"></div><div class="sheet" role="dialog" aria-modal="true"><div class="grab"></div>' + html + '</div>';
+  r.classList.add('open');
+  if (onMount) onMount(r.querySelector('.sheet'));
+}
+function closeSheet() {
+  const r = $('#modal-root'); r.classList.remove('open'); r.innerHTML = '';
+  const cb = state.onSheetClose; state.onSheetClose = null; if (cb) cb();
+}
+function ask(msg, ok, danger, cancel) {
+  return new Promise(res => {
+    const r = $('#dialog-root');
+    r.innerHTML = '<div class="backdrop"></div><div class="dialog" role="alertdialog"><p>' + msg + '</p><div class="btns"><button class="btn ghost" data-r="0">' + esc(cancel || 'Cancel') + '</button><button class="btn ' + (danger ? 'danger' : '') + '" data-r="1">' + esc(ok || 'OK') + '</button></div></div>';
+    r.classList.add('open');
+    r.querySelectorAll('[data-r]').forEach(b => b.addEventListener('click', () => { r.classList.remove('open'); r.innerHTML = ''; res(b.dataset.r === '1'); }));
+  });
+}
+function fieldHtml(f) {
+  const v = f.value == null ? '' : f.value;
+  const lab = esc(f.label);
+  const hint = f.hint ? '<span class="hint">' + f.hint + '</span>' : '';
+  if (f.type === 'select') return '<label class="fld">' + lab + '<select name="' + f.key + '">' + f.options.map(o => '<option value="' + esc(o.v) + '"' + (String(o.v) === String(v) ? ' selected' : '') + '>' + esc(o.l) + '</option>').join('') + '</select>' + hint + '</label>';
+  if (f.type === 'textarea') return '<label class="fld">' + lab + '<textarea name="' + f.key + '" placeholder="' + esc(f.placeholder || '') + '">' + esc(v) + '</textarea>' + hint + '</label>';
+  if (f.type === 'checks') return '<div class="fld">' + lab + '<div class="checks">' + f.options.map(o => '<label><input type="checkbox" name="' + f.key + '" value="' + esc(o.v) + '"' + (v.map(String).includes(String(o.v)) ? ' checked' : '') + '>' + esc(o.l) + '</label>').join('') + '</div>' + hint + '</div>';
+  const extra = f.type === 'password' ? ' autocomplete="new-password" autocapitalize="off" spellcheck="false"' : (f.type === 'text' ? ' autocapitalize="' + (f.nocap ? 'off' : 'sentences') + '"' : '');
+  return '<label class="fld">' + lab + '<input type="' + (f.type || 'text') + '" name="' + f.key + '" value="' + esc(v) + '" placeholder="' + esc(f.placeholder || '') + '"' + extra + '>' + hint + '</label>';
+}
+function readForm(form, fields) {
+  const out = {};
+  fields.forEach(f => {
+    if (f.type === 'checks') out[f.key] = Array.from(form.querySelectorAll('input[name="' + f.key + '"]:checked')).map(i => i.value);
+    else { const el = form.elements[f.key]; out[f.key] = el ? (f.type === 'password' ? el.value : el.value.trim()) : ''; }
+  });
+  return out;
+}
+/* Generic form sheet. validate(v) may return an error string; save(v) may be async and return false to keep it open. */
+function formModal(title, fields, opt) {
+  opt = opt || {};
+  return new Promise(res => {
+    const html = '<h3>' + esc(title) + '</h3>' + (opt.note ? '<p class="muted small">' + opt.note + '</p>' : '') +
+      '<form id="fm" novalidate>' + fields.map(fieldHtml).join('') + '<p class="err" id="fm-err"></p><div class="btns"><button type="button" class="btn ghost" data-x="cancel">Cancel</button><button type="submit" class="btn ' + (opt.danger ? 'danger' : '') + '">' + esc(opt.ok || 'Save') + '</button></div></form>';
+    openSheet(html, sheet => {
+      const f = sheet.querySelector('#fm');
+      state.onSheetClose = () => res(null);
+      f.addEventListener('submit', async ev => {
+        ev.preventDefault();
+        const v = readForm(f, fields);
+        const err = opt.validate ? opt.validate(v) : '';
+        if (err) { sheet.querySelector('#fm-err').textContent = err; return; }
+        if (opt.save) { const ok = await opt.save(v); if (ok === false) return; }
+        state.onSheetClose = null; closeSheet(); res(v);
+      });
+      sheet.querySelector('[data-x=cancel]').addEventListener('click', () => closeSheet());
+    });
+  });
+}
+
+
+/* ---------------- about tab ---------------- */
+const MAKER = {name: 'Jaydeep Saha', role: 'Senior, Photo Editorial'};
+const HOWTO = [
+  ['📲', 'Get started', '<ol><li>Open the RelaX link your admin shared.</li><li>Enter the <b>team passcode</b>. Your phone remembers it.</li><li>Add it to your home screen: on iPhone, tap <b>Share → Add to Home Screen</b> in Safari. On Android, tap <b>⋮ → Install app</b> (or Add to Home screen) in Chrome.</li></ol>'],
+  ['🗓️', 'Read the calendar', '<ul><li>Switch between <b>Week</b>, <b>Month</b> and <b>Year</b> at the top. Use ‹ › to move, and <b>Today</b> to jump back.</li><li>The small <b>number</b> on a day is how many people are off. A half day counts as ½.</li><li>Coloured bubbles show who is off. A half-filled bubble means a half day.</li><li>Weekends are faded and holidays are tinted. Neither counts as leave.</li><li>In Year view, darker days mean more people are off.</li></ul>'],
+  ['👆', 'See who is off on a day', '<ul><li>Tap any day to open its details: who is off, the leave type, the dates and any note.</li></ul>'],
+  ['🔎', 'Filter', '<ul><li>Use <b>All people</b> to see one person only.</li><li>Tap a leave type chip to hide or show it. The day counts follow your filters.</li></ul>'],
+  ['➕', 'Add, edit or delete leave (admins)', '<ul><li>Tap the <b>+</b> button. Choose the person, the leave type and the dates, then tap <b>Save</b>.</li><li>For a <b>Half day</b>, choose Morning (AM) or Afternoon (PM).</li><li>To change or remove an entry, tap the day, tap <b>Edit</b> next to the entry, then Save or Delete.</li><li>RelaX warns you if the new dates overlap the same person\'s existing leave.</li></ul>'],
+  ['📊', 'Reports', '<ul><li>Choose This month, Last month, Next month, This year, or your own dates.</li><li>See each person\'s days by leave type, the total days off and the busiest days.</li><li><b>Export</b> saves a file that opens in Excel.</li></ul>'],
+  ['⚙️', 'Settings (admins)', '<ul><li>Add or rename people, or mark them inactive.</li><li>Add leave types with their own colours.</li><li>Paste in the yearly holiday list.</li><li>Change the team passcode. Everyone then needs to enter the new one.</li></ul>'],
+  ['🔄', 'Staying up to date', '<ul><li>The line under the RelaX name at the top shows when the data was last updated. Tap ↻ to refresh.</li><li>Without internet, you still see the last data you loaded. Adding or editing needs a connection.</li></ul>'],
+  ['🔒', 'Privacy', '<ul><li>All leave data is encrypted with the team passcode before it is saved. Without the passcode, nobody can read it.</li><li>Only admins, using the admin key, can make changes.</li></ul>']
+];
+function aboutTab() {
+  const ini = MAKER.name.split(/\s+/).map(w => w[0]).join('').slice(0, 2).toUpperCase();
+  return '<div class="card ahero"><img class="logo" src="' + LOGO + '" alt="RelaX logo"><div class="an brand">' + BRAND + '</div><div class="muted">Team leave, made easy</div><span class="ver">Version ' + APP_VERSION + '</span></div>' +
+    '<div class="card maker"><div class="mav">' + esc(ini) + '</div><div><div class="lb">Designed &amp; built by</div><div class="mn">' + esc(MAKER.name) + '</div><div class="md">' + esc(MAKER.role) + '</div></div></div>' +
+    '<div class="card howto"><h3>How to use</h3>' + HOWTO.map((h, i) => '<details' + (i === 0 ? ' open' : '') + '><summary><span class="hi">' + h[0] + '</span>' + h[1] + '</summary><div class="hb">' + h[2] + '</div></details>').join('') + '</div>' +
+    '<p class="afoot">RelaX · Made with care by ' + esc(MAKER.name) + '</p>';
+}
+
+/* ---------------- top-level render ---------------- */
+function render() {
+  if (!state.data) return;
+  const d = state.data;
+  let body = '';
+  if (state.tab === 'cal') body = calendarTab();
+  else if (state.tab === 'rep') body = reportsTab();
+  else if (state.tab === 'about') body = aboutTab();
+  else body = settingsTab();
+  document.title = 'RelaX · ' + d.teamName;
+  $('#app').innerHTML =
+    '<header class="topbar"><img class="blogo" src="' + LOGO + '" alt=""><div class="tt"><div class="tn brand">' + BRAND + '</div><div class="ss ' + state.sync.status + '">' + esc(d.teamName) + ' · <span id="syncl">' + syncText() + '</span></div></div>' +
+    (isAdmin() ? '<span class="pill">Admin</span>' : '') +
+    '<button class="iconbtn" data-act="refresh" aria-label="Refresh">' + ICON.refresh + '</button></header>' +
+    body +
+    '<nav class="bnav"><div class="in">' +
+    [['cal', 'Calendar', ICON.cal], ['rep', 'Reports', ICON.chart], ['set', 'Settings', ICON.gear], ['about', 'About', ICON.info]].map(t => '<button data-act="tab" data-t="' + t[0] + '"' + (state.tab === t[0] ? ' aria-current="page"' : '') + '>' + t[2] + t[1] + '</button>').join('') +
+    '</div></nav>' +
+    (isAdmin() && state.tab === 'cal' ? '<button class="fab" data-act="add" aria-label="Add leave">+</button>' : '');
+}
+
+/* ---------------- calendar ---------------- */
+function periodTitle() {
+  const c = state.cursor;
+  if (state.view === 'month') return MONTHS[c.getMonth()] + ' ' + c.getFullYear();
+  if (state.view === 'year') return String(c.getFullYear());
+  const s = weekStartOf(c), e = addD(s, 6);
+  return fmtS(ymd(s)) + ' – ' + fmtS(ymd(e)) + ' ' + e.getFullYear();
+}
+function weekStartOf(d) { const ws = Number(state.data.settings.weekStart) || 0; return addD(d, -((d.getDay() - ws + 7) % 7)); }
+function dowOrder() { const ws = Number(state.data.settings.weekStart) || 0; return [0, 1, 2, 3, 4, 5, 6].map(i => (i + ws) % 7); }
+function calendarTab() {
+  const d = state.data, f = state.filters;
+  const members = d.members.slice().sort((a, b) => (b.active !== false) - (a.active !== false) || a.name.localeCompare(b.name));
+  let v = state.view === 'week' ? weekView() : state.view === 'year' ? yearView() : monthView();
+  return '<div class="toolbar"><button class="navbtn" data-act="prev" aria-label="Previous">‹</button><div class="ptitle">' + periodTitle() + '</div><button class="navbtn" data-act="next" aria-label="Next">›</button><button class="todaybtn" data-act="today">Today</button></div>' +
+    '<div class="seg" role="group" aria-label="Calendar view">' + ['week', 'month', 'year'].map(x => '<button data-act="view" data-v="' + x + '" aria-pressed="' + (state.view === x) + '">' + x[0].toUpperCase() + x.slice(1) + '</button>').join('') + '</div>' +
+    '<div class="filters"><select class="selchip" data-chg="fmember" aria-label="Filter by person"><option value="all">All people</option>' + members.map(m => '<option value="' + esc(m.id) + '"' + (f.member === m.id ? ' selected' : '') + '>' + esc(m.name) + (m.active === false ? ' (hidden)' : '') + '</option>').join('') + '</select>' +
+    d.types.map(t => '<button class="chipbtn" data-act="ftype" data-id="' + esc(t.id) + '" aria-pressed="' + !f.hidden.includes(t.id) + '" style="--c:' + safeColor(t.color) + '"><span class="sw"></span>' + esc(t.name) + '</button>').join('') + '</div>' +
+    '<div id="calview">' + v + '</div>' + legend();
+}
+function legend() {
+  if (state.view === 'year') return '<div class="legend"><span class="lg">Fewer <span class="heatbar"><i style="--a:.25"></i><i style="--a:.5"></i><i style="--a:.75"></i><i style="--a:1"></i></span> More people off</span><span class="lg"><span class="lgbox" style="--b:var(--holiday)"></span>Holiday</span><span class="lg"><span class="lgbox" style="--b:var(--weekend)"></span>Weekend</span></div>';
+  return '<div class="legend">' + state.data.types.map(t => '<span class="lg"><span class="sw" style="--c:' + safeColor(t.color) + '"></span>' + esc(t.name) + '</span>').join('') + '<span class="lg"><span class="lgbox" style="--b:var(--holiday)"></span>Holiday</span><span class="lg">Number = people off</span></div>' +
+    (filtersOn() ? '<div class="note">Filters are on – counts include only what is shown.</div>' : '');
+}
+function cellPeople(k, max) {
+  const list = dayList(k); const seen = new Map();
+  list.forEach(e => { if (!seen.has(e.memberId)) seen.set(e.memberId, e); });
+  const arr = Array.from(seen.values()).sort((a, b) => (memberById(a.memberId).name).localeCompare(memberById(b.memberId).name));
+  let h = arr.slice(0, max).map(e => { const t = typeById(e.typeId); const m = memberById(e.memberId); return '<span class="ini' + (weightOf(e) < 1 ? ' half' : '') + '" style="--c:' + safeColor(t && t.color) + '" title="' + esc(m.name + ' – ' + typeLabel(e)) + '">' + esc(initials(m.name)) + '</span>'; }).join('');
+  if (arr.length > max) h += '<span class="more">+' + (arr.length - max) + '</span>';
+  return h;
+}
+function monthView() {
+  const c = state.cursor, y = c.getFullYear(), m = c.getMonth(), today = ymd(new Date());
+  const first = new Date(y, m, 1), start = weekStartOf(first);
+  const dim = new Date(y, m + 1, 0).getDate();
+  const cells = Math.ceil((((first.getDay() - (Number(state.data.settings.weekStart) || 0) + 7) % 7) + dim) / 7) * 7;
+  const max = window.innerWidth >= 600 ? 5 : 3;
+  let h = '<div class="mgrid">' + dowOrder().map(i => '<div class="dow">' + DOW[i] + '</div>').join('');
+  for (let i = 0; i < cells; i++) {
+    const dt = addD(start, i), k = ymd(dt), hol = idx.hol.get(k), we = isWeekend(k);
+    const cls = ['mcell', dt.getMonth() !== m ? 'out' : '', we ? 'we' : '', hol ? 'hol' : '', k === today ? 'today' : ''].join(' ');
+    const n = dayCount(k);
+    h += '<button class="' + cls + '" data-act="day" data-k="' + k + '" aria-label="' + fmtD(k) + (n ? ', ' + fmtNum(n) + ' off' : '') + (hol ? ', ' + esc(hol) : '') + '"><span class="ctop"><span class="dn">' + dt.getDate() + '</span>' +
+      (n ? '<span class="cnt">' + fmtNum(n) + '</span>' : '') + '</span>' +
+      (hol ? '<span class="hname">' + esc(hol) + '</span>' : '<span class="inis">' + cellPeople(k, max) + '</span>') + '</button>';
+  }
+  return h + '</div>';
+}
+function weekView() {
+  const s = weekStartOf(state.cursor), today = ymd(new Date());
+  let h = '<div class="wlist">';
+  for (let i = 0; i < 7; i++) {
+    const dt = addD(s, i), k = ymd(dt), hol = idx.hol.get(k), we = isWeekend(k), n = dayCount(k);
+    const list = dayList(k).slice().sort((a, b) => memberById(a.memberId).name.localeCompare(memberById(b.memberId).name));
+    let inner;
+    if (hol) inner = '<span class="holtag">🎉 ' + esc(hol) + '</span>';
+    else if (we) inner = '<span class="free">Weekend</span>';
+    else if (!list.length) inner = '<span class="free">Everyone in</span>';
+    else inner = list.map(e => { const t = typeById(e.typeId); return '<span class="tag" style="--c:' + safeColor(t && t.color) + '"><span class="sw"></span>' + esc(memberById(e.memberId).name) + ' · ' + esc(typeLabel(e)) + '</span>'; }).join('');
+    h += '<button class="wrow ' + (we ? 'we ' : '') + (hol ? 'hol ' : '') + (k === today ? 'today' : '') + '" data-act="day" data-k="' + k + '"><div class="wdate"><div class="d1">' + DOW[dt.getDay()] + '</div><div class="d2">' + dt.getDate() + '</div><div class="d1">' + MON3[dt.getMonth()] + '</div></div><div class="wbody">' + inner + '</div>' + (n ? '<span class="wcnt">' + fmtNum(n) + ' off</span>' : '') + '</button>';
+  }
+  return h + '</div>';
+}
+function yearView() {
+  const y = state.cursor.getFullYear(), today = ymd(new Date());
+  let mx = 1;
+  for (let dt = new Date(y, 0, 1); dt.getFullYear() === y; dt = addD(dt, 1)) mx = Math.max(mx, dayCount(ymd(dt)));
+  const order = dowOrder();
+  let h = '<div class="ygrid">';
+  for (let m = 0; m < 12; m++) {
+    const first = new Date(y, m, 1), off = (first.getDay() - order[0] + 7) % 7, dim = new Date(y, m + 1, 0).getDate();
+    h += '<div class="card mini"><button class="mt" data-act="month" data-m="' + m + '">' + MONTHS[m] + '</button><div class="g">' + order.map(i => '<div class="dw">' + DOW[i][0] + '</div>').join('');
+    for (let i = 0; i < off; i++) h += '<span class="yc blank"></span>';
+    for (let dd = 1; dd <= dim; dd++) {
+      const k = ymd(new Date(y, m, dd)), hol = idx.hol.has(k), we = isWeekend(k), n = dayCount(k);
+      let cls = 'yc', st = '';
+      if (hol) cls += ' hol'; else if (we) cls += ' we'; else if (n) { cls += ' h'; st = ' style="--a:' + (0.3 + 0.7 * n / mx).toFixed(2) + '"'; }
+      if (k === today) cls += ' today';
+      h += '<button class="' + cls + '"' + st + ' data-act="day" data-k="' + k + '" aria-label="' + fmtD(k) + (n ? ', ' + fmtNum(n) + ' off' : '') + '">' + dd + '</button>';
+    }
+    h += '</div></div>';
+  }
+  return h + '</div>';
+}
+function shiftPeriod(dir) {
+  const c = state.cursor;
+  if (state.view === 'month') state.cursor = new Date(c.getFullYear(), c.getMonth() + dir, 1);
+  else if (state.view === 'week') state.cursor = addD(c, 7 * dir);
+  else state.cursor = new Date(c.getFullYear() + dir, 0, 1);
+  render();
+}
+
+/* ---------------- day sheet ---------------- */
+function openDay(k) {
+  const hol = idx.hol.get(k), we = isWeekend(k);
+  const list = dayList(k).slice().sort((a, b) => memberById(a.memberId).name.localeCompare(memberById(b.memberId).name));
+  const n = dayCount(k);
+  let h = '<h3>' + fmtD(k) + '</h3>';
+  if (hol) h += '<p class="holtag">🎉 Holiday: ' + esc(hol) + '</p>';
+  else if (we) h += '<p class="muted">Weekend</p>';
+  else h += '<div class="big">' + fmtNum(n) + ' <span class="muted small">' + (n === 1 ? 'person' : 'people') + ' off' + (filtersOn() ? ' (filtered)' : '') + '</span></div>';
+  if (!hol && !we) {
+    if (!list.length) h += '<p class="muted">Everyone is in.</p>';
+    h += list.map(e => {
+      const t = typeById(e.typeId), m = memberById(e.memberId);
+      return '<div class="lrow"><span class="sw" style="--c:' + safeColor(t && t.color) + ';width:14px;height:14px"></span><div class="main"><div class="nm">' + esc(m.name) + '</div><div class="sub">' + esc(typeLabel(e)) + ' · ' + fmtRange(e.start, e.end) + (e.note ? ' · ' + esc(e.note) : '') + '</div></div>' +
+        (isAdmin() ? '<button class="btn ghost sm" data-act="edit" data-id="' + esc(e.id) + '">Edit</button>' : '') + '</div>';
+    }).join('');
+  }
+  h += '<div class="btns">' + (isAdmin() && !hol && !we ? '<button class="btn grow" data-act="add" data-k="' + k + '">+ Add leave</button>' : '') + '<button class="btn ghost" data-act="close">Close</button></div>';
+  openSheet(h);
+}
+
+/* ---------------- add / edit leave ---------------- */
+function openLeaveForm(entry, dateK) {
+  if (!isAdmin()) { toast('Only admins can add leave. Add the admin edit key in Settings.', 3500); return; }
+  const d = state.data;
+  if (!d.members.length || !d.types.length) { toast('Add team members and leave types in Settings first.', 3500); return; }
+  const today = dateK || ymd(new Date());
+  const e = entry ? Object.assign({}, entry) : {id: '', memberId: state.filters.member !== 'all' ? state.filters.member : '', typeId: d.types[0].id, start: today, end: today, part: '', note: ''};
+  const mem = d.members.filter(m => m.active !== false || m.id === e.memberId).sort((a, b) => a.name.localeCompare(b.name));
+  const h = '<h3>' + (entry ? 'Edit leave' : 'Add leave') + '</h3><form id="lf" novalidate>' +
+    '<label class="fld">Person<select name="memberId"><option value="">Choose a person…</option>' + mem.map(m => '<option value="' + esc(m.id) + '"' + (m.id === e.memberId ? ' selected' : '') + '>' + esc(m.name) + '</option>').join('') + '</select></label>' +
+    '<label class="fld">Leave type<select name="typeId">' + d.types.map(t => '<option value="' + esc(t.id) + '"' + (t.id === e.typeId ? ' selected' : '') + '>' + esc(t.name) + '</option>').join('') + '</select></label>' +
+    '<div class="fld" id="partrow">Which half?<div class="checks"><label><input type="radio" name="part" value="AM"' + (e.part !== 'PM' ? ' checked' : '') + '>Morning (AM)</label><label><input type="radio" name="part" value="PM"' + (e.part === 'PM' ? ' checked' : '') + '>Afternoon (PM)</label></div></div>' +
+    '<div class="row2"><label class="fld" id="fromlab">From<input type="date" name="start" value="' + esc(e.start) + '"></label><label class="fld" id="torow">To<input type="date" name="end" value="' + esc(e.end) + '"></label></div>' +
+    '<p class="muted small" id="wdinfo"></p>' +
+    '<label class="fld">Note (optional)<input type="text" name="note" maxlength="120" value="' + esc(e.note || '') + '" placeholder="e.g. Travelling"></label>' +
+    '<p class="err" id="lerr"></p><div class="btns">' + (entry ? '<button type="button" class="btn textdanger grow" data-x="del">Delete</button>' : '') +
+    '<button type="button" class="btn ghost" data-x="cancel">Cancel</button><button type="submit" class="btn">Save</button></div></form>';
+  openSheet(h, sheet => {
+    const f = sheet.querySelector('#lf'), info = sheet.querySelector('#wdinfo'), err = sheet.querySelector('#lerr');
+    const upd = () => {
+      const t = typeById(f.typeId.value), half = !!(t && t.half);
+      sheet.querySelector('#partrow').hidden = !half; sheet.querySelector('#torow').hidden = half;
+      sheet.querySelector('#fromlab').firstChild.textContent = half ? 'Date' : 'From';
+      if (half || !f.end.value || f.end.value < f.start.value) f.end.value = f.start.value;
+      if (isDate(f.start.value) && isDate(f.end.value)) {
+        const wd = workingDays(f.start.value, f.end.value);
+        info.textContent = wd === 0 ? 'No working days in this range (weekend or holiday).' : (half ? 'Half day on ' + fmtD(f.start.value) : wd + ' working day' + (wd === 1 ? '' : 's') + ' · ' + fmtRange(f.start.value, f.end.value));
+      } else info.textContent = '';
+    };
+    ['typeId', 'start', 'end'].forEach(n => f.elements[n].addEventListener('change', upd));
+    upd();
+    sheet.querySelector('[data-x=cancel]').addEventListener('click', () => closeSheet());
+    const del = sheet.querySelector('[data-x=del]');
+    if (del) del.addEventListener('click', async () => {
+      if (!await ask('Delete this leave entry for <b>' + esc(memberById(entry.memberId).name) + '</b> (' + fmtRange(entry.start, entry.end) + ')?', 'Delete', true)) return;
+      const ok = await commit(data => { const i = data.entries.findIndex(x => x.id === entry.id); if (i >= 0) data.entries.splice(i, 1); }, {done: 'Leave deleted'});
+      if (ok) closeSheet();
+    });
+    f.addEventListener('submit', async ev => {
+      ev.preventDefault(); err.textContent = '';
+      const t = typeById(f.typeId.value);
+      const obj = {id: e.id || uid(), memberId: f.memberId.value, typeId: f.typeId.value, start: f.start.value, end: (t && t.half) ? f.start.value : f.end.value,
+        part: (t && t.half) ? ((f.querySelector('input[name=part]:checked') || {}).value || 'AM') : '', note: f.note.value.trim()};
+      if (!obj.memberId) { err.textContent = 'Choose a person.'; return; }
+      if (!isDate(obj.start) || !isDate(obj.end)) { err.textContent = 'Choose valid dates.'; return; }
+      if (obj.end < obj.start) { err.textContent = 'The end date is before the start date.'; return; }
+      if (pd(obj.end) - pd(obj.start) > 366 * 864e5) { err.textContent = 'Please keep one entry to a year or less.'; return; }
+      const clash = state.data.entries.filter(x => x.memberId === obj.memberId && x.id !== obj.id && x.start <= obj.end && x.end >= obj.start);
+      if (clash.length && !await ask('<b>' + esc(memberById(obj.memberId).name) + '</b> already has ' + clash.map(x => esc(typeLabel(x)) + ' on ' + fmtRange(x.start, x.end)).join(', ') + '. Save anyway?', 'Save anyway')) return;
+      const isNew = !entry;
+      const ok = await commit(data => {
+        if (isNew) { if (!data.entries.some(x => x.id === obj.id)) data.entries.push(obj); }
+        else { const i = data.entries.findIndex(x => x.id === obj.id); if (i < 0) throw new Error('This entry was deleted by someone else. Add it again if needed.'); data.entries[i] = obj; }
+      }, {done: isNew ? 'Leave added' : 'Leave updated'});
+      if (ok) closeSheet();
+    });
+  });
+}
+
+/* ---------------- reports ---------------- */
+function monthRange(d) { return {from: ymd(new Date(d.getFullYear(), d.getMonth(), 1)), to: ymd(new Date(d.getFullYear(), d.getMonth() + 1, 0))}; }
+function computeReport(from, to) {
+  const rows = new Map(), busy = [];
+  let cur = pd(from); const end = pd(to);
+  for (let i = 0; i < 1200 && cur <= end; i++, cur = addD(cur, 1)) {
+    const k = ymd(cur); if (!isWorking(k)) continue;
+    for (const e of dayList(k)) {
+      if (!rows.has(e.memberId)) rows.set(e.memberId, {counts: {}, total: 0});
+      const r = rows.get(e.memberId); r.counts[e.typeId] = (r.counts[e.typeId] || 0) + 1;
+    }
+    let c = 0; perMember(k).forEach((v, mid) => { rows.get(mid).total += v; c += v; });
+    if (c > 0) busy.push({k, c, p: peopleOn(k)});
+  }
+  busy.sort((a, b) => b.c - a.c || (a.k < b.k ? -1 : 1));
+  return {rows, busy};
+}
+function reportsTab() {
+  if (!state.rep) state.rep = monthRange(new Date());
+  const {from, to} = state.rep, d = state.data;
+  const valid = isDate(from) && isDate(to) && from <= to;
+  const types = d.types.filter(t => !state.filters.hidden.includes(t.id));
+  let h = '<div class="wrap"><h2>Reports</h2><div class="presets">' +
+    '<button class="btn ghost sm" data-act="rp" data-p="tm">This month</button><button class="btn ghost sm" data-act="rp" data-p="lm">Last month</button><button class="btn ghost sm" data-act="rp" data-p="nm">Next month</button><button class="btn ghost sm" data-act="rp" data-p="ty">This year</button></div>' +
+    '<div class="row2"><label class="fld">From<input type="date" data-chg="rfrom" value="' + esc(from) + '"></label><label class="fld">To<input type="date" data-chg="rto" value="' + esc(to) + '"></label></div>';
+  if (!valid) return h + '<p class="err">Choose a valid date range.</p></div>';
+  const {rows, busy} = computeReport(from, to);
+  const ids = Array.from(rows.keys()).sort((a, b) => memberById(a).name.localeCompare(memberById(b).name));
+  h += '<p class="muted small">' + fmtRange(from, to) + ' · ' + workingDays(from, to) + ' working days' + (filtersOn() ? ' · calendar filters applied' : '') + '</p>';
+  if (!ids.length) h += '<div class="card pad muted">No leave in this period.</div>';
+  else {
+    const tot = {}; let all = 0;
+    h += '<div class="card tablewrap"><table><thead><tr><th>Person</th>' + types.map(t => '<th class="n"><span class="sw" style="--c:' + safeColor(t.color) + '"></span> ' + esc(t.name) + '</th>').join('') + '<th class="n">Days off</th></tr></thead><tbody>' +
+      ids.map(id => { const r = rows.get(id); all += r.total; return '<tr><td>' + esc(memberById(id).name) + '</td>' + types.map(t => { const v = r.counts[t.id] || 0; tot[t.id] = (tot[t.id] || 0) + v; return '<td class="n">' + (v || '–') + '</td>'; }).join('') + '<td class="n"><b>' + fmtNum(r.total) + '</b></td></tr>'; }).join('') +
+      '</tbody><tfoot><tr><td>Total</td>' + types.map(t => '<td class="n">' + (tot[t.id] || 0) + '</td>').join('') + '<td class="n">' + fmtNum(all) + '</td></tr></tfoot></table></div>' +
+      '<p class="note">Type columns = number of working days marked. Days off = full-day equivalent (half days count ½).</p>';
+    h += '<h3>Busiest days</h3><div class="card pad">' + busy.slice(0, 5).map(b => '<div class="kv"><span>' + fmtD(b.k) + '</span><span><b>' + fmtNum(b.c) + '</b> off</span></div>').join('') + '</div>';
+  }
+  h += '<div class="btns"><button class="btn" data-act="csv-sum">Export summary</button><button class="btn ghost" data-act="csv-ent">Export entries</button></div><p class="note">Exports open in Excel (CSV).</p></div>';
+  return h;
+}
+function csvCell(v) { v = String(v == null ? '' : v); if (/^[=+\-@]/.test(v)) v = "'" + v; return /[",\n\r;]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }
+async function saveCsv(name, rows) {
+  const s = '\ufeff' + rows.map(r => r.map(csvCell).join(',')).join('\r\n');
+  const blob = new Blob([s], {type: 'text/csv;charset=utf-8'});
+  const ios = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  if (ios && navigator.canShare) {
+    try { const file = new File([blob], name, {type: 'text/csv'}); if (navigator.canShare({files: [file]})) { await navigator.share({files: [file], title: name}); return; } } catch (e) { if (e && e.name === 'AbortError') return; }
+  }
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 2000);
+}
+function exportSummary() {
+  const {from, to} = state.rep, types = state.data.types.filter(t => !state.filters.hidden.includes(t.id));
+  const {rows} = computeReport(from, to);
+  const out = [['Leave summary', fmtRange(from, to)], ['Person'].concat(types.map(t => t.name + ' (days marked)')).concat(['Days off (full-day equivalent)'])];
+  Array.from(rows.keys()).sort((a, b) => memberById(a).name.localeCompare(memberById(b).name)).forEach(id => { const r = rows.get(id); out.push([memberById(id).name].concat(types.map(t => r.counts[t.id] || 0)).concat([r.total])); });
+  saveCsv('Leave summary ' + from + ' to ' + to + '.csv', out);
+}
+function exportEntries() {
+  const {from, to} = state.rep, f = state.filters;
+  const list = state.data.entries.filter(e => e.start <= to && e.end >= from && (f.member === 'all' || e.memberId === f.member) && !f.hidden.includes(e.typeId) && memberById(e.memberId))
+    .sort((a, b) => a.start < b.start ? -1 : a.start > b.start ? 1 : memberById(a.memberId).name.localeCompare(memberById(b.memberId).name));
+  const out = [['Person', 'Leave type', 'Half', 'From', 'To', 'Working days in period', 'Days off in period', 'Note']];
+  list.forEach(e => { const a = e.start < from ? from : e.start, b = e.end > to ? to : e.end, wd = workingDays(a, b); out.push([memberById(e.memberId).name, (typeById(e.typeId) || {}).name || '', e.part || '', e.start, e.end, wd, wd * Math.min(1, weightOf(e)), e.note || '']); });
+  saveCsv('Leave entries ' + from + ' to ' + to + '.csv', out);
+}
+
+/* ---------------- settings ---------------- */
+function settingsTab() {
+  const d = state.data, adm = isAdmin();
+  const members = d.members.slice().sort((a, b) => (b.active !== false) - (a.active !== false) || a.name.localeCompare(b.name));
+  const years = Array.from(new Set(d.holidays.map(h => Number(h.date.slice(0, 4))).concat([new Date().getFullYear(), new Date().getFullYear() + 1]))).sort();
+  const hols = d.holidays.filter(h => h.date.startsWith(String(state.holYear)));
+  const btn = (act, label, extra, cls) => adm ? '<button class="btn ' + (cls || 'ghost') + ' sm needsnet" data-act="' + act + '"' + (extra || '') + '>' + label + '</button>' : '';
+  let h = '<div class="wrap"><h2>Settings</h2>';
+  h += '<div class="card sec"><h3>This phone</h3>' +
+    '<div class="kv"><span>Access</span><span>' + (adm ? 'Admin (can edit)' : 'Viewer') + '</span></div>' +
+    '<div class="kv"><span>Last updated</span><span>' + (state.sync.at ? relTime(state.sync.at) : '–') + '</span></div>' +
+    '<div class="btns">' + (adm ? '<button class="btn ghost sm" data-act="tok-rm">Remove edit key</button>' : '<button class="btn sm" data-act="tok-add">I\'m an admin – add edit key</button>') + '<button class="btn ghost sm" data-act="lock">Lock this phone</button></div></div>';
+  h += '<div class="card sec"><h3>Team (' + d.members.filter(m => m.active !== false).length + ')' + btn('m-add', '+ Add', '', 'sm') + '</h3>' +
+    (members.length ? members.map(m => '<div class="lrow"><div class="main"><span class="nm">' + esc(m.name) + '</span>' + (m.active === false ? '<span class="tagsm">hidden</span>' : '') + '</div>' + btn('m-edit', 'Edit', ' data-id="' + esc(m.id) + '"') + '</div>').join('') : '<p class="muted">No people yet.</p>') + '</div>';
+  h += '<div class="card sec"><h3>Leave types' + btn('t-add', '+ Add', '', 'sm') + '</h3>' +
+    d.types.map(t => '<div class="lrow"><span class="sw" style="--c:' + safeColor(t.color) + ';width:16px;height:16px"></span><div class="main"><div class="nm">' + esc(t.name) + '</div><div class="sub">' + ({'1': 'Counts as a full day off', '0.5': 'Counts as half a day off', '0': 'Shown only, not counted'}[String(t.weight)] || '') + (t.half ? ' · asks AM/PM' : '') + '</div></div>' + btn('t-edit', 'Edit', ' data-id="' + esc(t.id) + '"') + '</div>').join('') + '</div>';
+  h += '<div class="card sec"><h3>Holidays' + btn('h-add', '+ Add', '', 'sm') + '</h3><div class="yearchips">' + years.map(y => '<button class="chipbtn" data-act="h-year" data-y="' + y + '" aria-pressed="' + (y === state.holYear) + '">' + y + '</button>').join('') + '</div>' +
+    (hols.length ? hols.map(x => '<div class="lrow"><div class="main"><div class="nm">' + esc(x.name) + '</div><div class="sub">' + fmtD(x.date) + '</div></div>' + btn('h-del', 'Remove', ' data-k="' + esc(x.date) + '"', 'textdanger') + '</div>').join('') : '<p class="muted">No holidays for ' + state.holYear + '.</p>') +
+    (adm ? '<div class="btns"><button class="btn ghost sm needsnet" data-act="h-paste">Paste a holiday list</button></div>' : '') + '</div>';
+  h += '<div class="card sec"><h3>General</h3>' +
+    '<div class="kv"><span>Team name</span><span>' + esc(d.teamName) + '</span></div>' +
+    '<div class="kv"><span>Week starts on</span><span>' + DOW[Number(d.settings.weekStart) || 0] + '</span></div>' +
+    '<div class="kv"><span>Weekend</span><span>' + d.settings.weekend.map(i => DOW[i]).join(', ') + '</span></div>' +
+    (adm ? '<div class="btns"><button class="btn ghost sm needsnet" data-act="g-edit">Edit</button><button class="btn ghost sm needsnet" data-act="pass-ch">Change team passcode</button></div>' : '') + '</div>';
+  h += '<div class="card sec"><h3>Storage &amp; version</h3><div class="kv"><span>Storage</span><span>' + esc(repoLabel()) + '</span></div><div class="kv"><span>Data version</span><span>' + (d.rev || 0) + (d.updated ? ' · ' + fmtD(d.updated.slice(0, 10)) : '') + '</span></div><div class="kv"><span>App version</span><span>' + APP_VERSION + '</span></div>' +
+    '<p class="muted small">Data is encrypted with the team passcode before it is stored on GitHub. Viewers need the passcode; admins also need the edit key.</p></div></div>';
+  return h;
+}
+async function addToken() {
+  await formModal('Add admin edit key', [{key: 'tok', label: 'Edit key (GitHub token)', type: 'password', placeholder: 'github_pat_…'}], {
+    ok: 'Check & save', note: 'Paste the edit key your tracker owner gave you. It is stored only on this phone.',
+    validate: v => v.tok.length < 20 ? 'That does not look like a full key.' : '',
+    save: async v => {
+      setBusy(true);
+      try {
+        const r = await fetch(apiBase(), {headers: ghHeaders(v.tok), cache: 'no-store'});
+        if (r.status === 401) { toast('That key is not valid or has expired.', 4000); return false; }
+        if (!r.ok) { toast('That key cannot see ' + repoLabel() + '. Check it has access to this repository.', 5000); return false; }
+        const j = await r.json();
+        if (j.permissions && j.permissions.push === false) { toast('That key belongs to an account without write access to ' + repoLabel() + '.', 5000); return false; }
+        state.token = v.tok; localStorage.setItem(K.token, v.tok); toast('Edit key saved – you can now make changes.'); render(); return true;
+      } catch (e) { toast("Can't reach GitHub right now.", 4000); return false; }
+      finally { setBusy(false); }
+    }
+  });
+}
+async function editMember(id) {
+  const m = state.data.members.find(x => x.id === id); if (!m) return;
+  const used = state.data.entries.filter(e => e.memberId === id).length;
+  const v = await formModal('Edit person', [
+    {key: 'name', label: 'Name', value: m.name},
+    {key: 'active', label: 'Show on calendar and in lists', type: 'select', value: m.active === false ? '0' : '1', options: [{v: '1', l: 'Yes – active'}, {v: '0', l: 'No – hide (keeps their history)'}]},
+    {key: 'del', label: 'Delete', type: 'select', value: '0', options: [{v: '0', l: 'Keep this person'}, {v: '1', l: 'Delete this person' + (used ? ' and their ' + used + ' leave entr' + (used === 1 ? 'y' : 'ies') : '')}]}
+  ], {validate: v => v.name ? '' : 'Enter a name.'});
+  if (!v) return;
+  if (v.del === '1') {
+    if (!await ask('Delete <b>' + esc(m.name) + '</b>' + (used ? ' and ' + used + ' leave entr' + (used === 1 ? 'y' : 'ies') : '') + '? This cannot be undone in the app.', 'Delete', true)) return;
+    return commit(data => { data.members = data.members.filter(x => x.id !== id); data.entries = data.entries.filter(e => e.memberId !== id); }, {done: 'Person deleted'});
+  }
+  commit(data => { const x = data.members.find(y => y.id === id); if (!x) throw new Error('This person was removed by someone else.'); x.name = v.name; x.active = v.active === '1'; });
+}
+async function addMembers() {
+  const v = await formModal('Add people', [{key: 'names', label: 'Names (one per line)', type: 'textarea', placeholder: 'Asha\nRahul'}], {validate: v => v.names ? '' : 'Enter at least one name.'});
+  if (!v) return;
+  const names = v.names.split(/\n/).map(s => s.trim()).filter(Boolean);
+  commit(data => { names.forEach(n => { if (!data.members.some(m => m.name.toLowerCase() === n.toLowerCase())) data.members.push({id: uid(), name: n, active: true}); }); }, {done: names.length + ' added'});
+}
+function typeFields(t) {
+  return [
+    {key: 'name', label: 'Name', value: t.name || ''},
+    {key: 'color', label: 'Colour', type: 'color', value: safeColor(t.color)},
+    {key: 'weight', label: 'How it counts on the "people off" number', type: 'select', value: String(t.weight == null ? 1 : t.weight), options: [{v: '1', l: 'Full day off'}, {v: '0.5', l: 'Half a day off'}, {v: '0', l: 'Shown only – not counted'}]},
+    {key: 'half', label: 'Ask for morning/afternoon (single day)', type: 'select', value: t.half ? '1' : '0', options: [{v: '0', l: 'No'}, {v: '1', l: 'Yes'}]}
+  ];
+}
+async function addType() {
+  const v = await formModal('Add leave type', typeFields({color: DEFAULT_COLORS[state.data.types.length % DEFAULT_COLORS.length], weight: 1}), {validate: v => v.name ? '' : 'Enter a name.'});
+  if (!v) return;
+  commit(data => { data.types.push({id: uid(), name: v.name, color: safeColor(v.color), weight: Number(v.weight), half: v.half === '1'}); }, {done: 'Leave type added'});
+}
+async function editType(id) {
+  const t = state.data.types.find(x => x.id === id); if (!t) return;
+  const used = state.data.entries.filter(e => e.typeId === id).length;
+  const fields = typeFields(t).concat([{key: 'del', label: 'Delete', type: 'select', value: '0', options: [{v: '0', l: 'Keep this type'}, {v: '1', l: used ? 'Delete (not possible – used by ' + used + ' entries)' : 'Delete this type'}]}]);
+  const v = await formModal('Edit leave type', fields, {validate: v => !v.name ? 'Enter a name.' : (v.del === '1' && used ? 'This type is used by ' + used + ' entries. Change or delete those entries first.' : (v.del === '1' && state.data.types.length === 1 ? 'Keep at least one leave type.' : ''))});
+  if (!v) return;
+  if (v.del === '1') return commit(data => { if (data.entries.some(e => e.typeId === id)) throw new Error('This type is now in use, so it was not deleted.'); data.types = data.types.filter(x => x.id !== id); }, {done: 'Leave type deleted'});
+  commit(data => { const x = data.types.find(y => y.id === id); if (!x) throw new Error('This type was removed by someone else.'); x.name = v.name; x.color = safeColor(v.color); x.weight = Number(v.weight); x.half = v.half === '1'; });
+}
+async function addHoliday() {
+  const v = await formModal('Add holiday', [{key: 'date', label: 'Date', type: 'date', value: state.holYear + '-01-01'}, {key: 'name', label: 'Name', placeholder: 'e.g. Diwali'}], {validate: v => !isDate(v.date) ? 'Choose a date.' : (!v.name ? 'Enter a name.' : '')});
+  if (!v) return;
+  state.holYear = Number(v.date.slice(0, 4));
+  commit(data => { data.holidays = data.holidays.filter(h => h.date !== v.date); data.holidays.push({date: v.date, name: v.name}); }, {done: 'Holiday added'});
+}
+function parseHolidayLines(text) {
+  const out = [], bad = [];
+  text.split(/\n/).map(s => s.trim()).filter(Boolean).forEach(line => {
+    let m = line.match(/^(\d{4})-(\d{1,2})-(\d{1,2})\s*[,;\t|:\-–]?\s*(.+)$/), date;
+    if (m) date = m[1] + '-' + pad(+m[2]) + '-' + pad(+m[3]);
+    else { m = line.match(/^(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{4})\s*[,;\t|:\-–]?\s*(.+)$/); if (m) { date = m[3] + '-' + pad(+m[2]) + '-' + pad(+m[1]); m[4] = m[4]; } }
+    if (m && isDate(date) && m[4].trim()) out.push({date, name: m[4].trim()}); else bad.push(line);
+  });
+  return {out, bad};
+}
+async function pasteHolidays() {
+  const v = await formModal('Paste a holiday list', [{key: 'txt', label: 'One holiday per line', type: 'textarea', placeholder: '26/01/2027, Republic Day\n2027-03-22 Holi'}], {
+    note: 'Dates as DD/MM/YYYY or YYYY-MM-DD, followed by the name. Existing holidays on the same date are replaced.',
+    validate: v => { const p = parseHolidayLines(v.txt); return !p.out.length ? 'No valid lines found.' : (p.bad.length ? 'Could not read: ' + p.bad.slice(0, 3).join(' | ') : ''); }
+  });
+  if (!v) return;
+  const list = parseHolidayLines(v.txt).out;
+  state.holYear = Number(list[0].date.slice(0, 4));
+  commit(data => { const ds = new Set(list.map(h => h.date)); data.holidays = data.holidays.filter(h => !ds.has(h.date)).concat(list); }, {done: list.length + ' holidays saved'});
+}
+async function editGeneral() {
+  const s = state.data.settings;
+  const v = await formModal('General', [
+    {key: 'team', label: 'Team name', value: state.data.teamName},
+    {key: 'ws', label: 'Week starts on', type: 'select', value: String(s.weekStart), options: [{v: '1', l: 'Monday'}, {v: '0', l: 'Sunday'}, {v: '6', l: 'Saturday'}]},
+    {key: 'we', label: 'Weekend days', type: 'checks', value: s.weekend, options: [1, 2, 3, 4, 5, 6, 0].map(i => ({v: String(i), l: DOW[i]}))}
+  ], {validate: v => !v.team ? 'Enter a team name.' : (v.we.length > 4 ? 'Too many weekend days.' : '')});
+  if (!v) return;
+  commit(data => { data.teamName = v.team; data.settings.weekStart = Number(v.ws); data.settings.weekend = v.we.map(Number); });
+}
+async function changePass() {
+  const v = await formModal('Change team passcode', [{key: 'p1', label: 'New passcode', type: 'password'}, {key: 'p2', label: 'Repeat new passcode', type: 'password'}], {
+    note: 'Everyone will be asked for the new passcode the next time they open the app. Share it privately.',
+    ok: 'Change passcode', validate: v => v.p1.length < 8 ? 'Use at least 8 characters.' : (v.p1 !== v.p2 ? 'The passcodes do not match.' : '')
+  });
+  if (!v) return;
+  commit(() => {}, {newPass: v.p1, done: 'Passcode changed – share it with the team'});
+}
+
+/* ---------------- full-screen states ---------------- */
+function screen(inner) { $('#app').innerHTML = '<div class="screen"><div class="card pad"><img class="logo" src="' + LOGO + '" alt="RelaX logo">' + inner + '</div></div>'; }
+function renderLoading(msg) { screen('<h1 class="brand">' + BRAND + '</h1><div class="spin"></div><p class="muted" style="text-align:center">' + esc(msg || 'Loading…') + '</p>'); }
+function renderOffline() {
+  screen('<h1>Can\'t connect</h1><p class="muted">' + esc(state.sync.msg || 'Check your internet connection.') + '</p><div class="btns"><button class="btn full" data-act="retry">Try again</button></div>');
+}
+function renderLock(msg) {
+  screen('<h1 class="brand">' + BRAND + '</h1><p class="muted tag-line small">Team leave, made easy</p><p class="muted">' + esc(msg || 'Enter the team passcode to open the calendar.') + '</p><form id="lockf" novalidate><input type="password" name="p" placeholder="Team passcode" autocomplete="current-password" autocapitalize="off" spellcheck="false"><p class="err" id="lerr"></p><button class="btn full" type="submit">Open</button></form>');
+  const f = $('#lockf');
+  f.p.focus();
+  f.addEventListener('submit', async ev => {
+    ev.preventDefault();
+    const p = f.p.value, err = $('#lerr'), b = f.querySelector('button');
+    if (!p) { err.textContent = 'Enter the passcode.'; return; }
+    b.disabled = true; b.textContent = 'Checking…'; err.textContent = '';
+    try {
+      let rem = state.pendingRemote;
+      if (!rem) {
+        try { rem = await fetchRemote(); }
+        catch (e) { const c = localStorage.getItem(K.cache); if (c) rem = {env: JSON.parse(c), sha: null, cached: true}; else throw e; }
+      }
+      if (rem.notFound) return renderSetup();
+      const d = await decryptData(rem.env, p);
+      state.pass = p; localStorage.setItem(K.pass, p); state.pendingRemote = null;
+      applyData(d, rem.env, rem.sha);
+      if (rem.cached) { state.sync.status = 'offline'; updateSyncLabel(); }
+    } catch (e) { err.textContent = e.message; b.disabled = false; b.textContent = 'Open'; }
+  });
+}
+function renderConnect() {
+  screen('<h1>Connect ' + BRAND + '</h1><p class="muted">Enter where the tracker is stored on GitHub. (When the app is opened from its github.io link this is filled in automatically.)</p><form id="cf" novalidate>' +
+    fieldHtml({key: 'owner', label: 'GitHub username', placeholder: 'e.g. jaydeep-s', nocap: true}) + fieldHtml({key: 'repo', label: 'Repository name', placeholder: 'e.g. relax', nocap: true}) +
+    '<p class="err" id="cerr"></p><button class="btn full" type="submit">Continue</button></form>');
+  $('#cf').addEventListener('submit', ev => {
+    ev.preventDefault(); const f = ev.target, o = f.owner.value.trim(), r = f.repo.value.trim();
+    if (!/^[\w.-]+$/.test(o) || !/^[\w.-]+$/.test(r)) { $('#cerr').textContent = 'Enter a valid username and repository.'; return; }
+    localStorage.setItem(K.repo, o + '/' + r); boot();
+  });
+}
+function renderSetup() {
+  screen('<h1>Set up ' + BRAND + '</h1><p class="muted">No tracker data exists in <b>' + esc(repoLabel()) + '</b> yet. Create it now (owner only, one time).</p><form id="sf" novalidate>' +
+    fieldHtml({key: 'team', label: 'Team name', value: 'Photo Editorial – Leave'}) +
+    fieldHtml({key: 'people', label: 'Team members (one per line – you can change later)', type: 'textarea', placeholder: 'Jaydeep\nAsha\nRahul'}) +
+    fieldHtml({key: 'p1', label: 'Choose a team passcode (8+ characters)', type: 'password'}) +
+    fieldHtml({key: 'p2', label: 'Repeat the passcode', type: 'password'}) +
+    fieldHtml({key: 'tok', label: 'Your admin edit key (GitHub token)', type: 'password', placeholder: 'github_pat_…', hint: 'See step 4 of the setup guide.'}) +
+    '<p class="err" id="serr"></p><button class="btn full" type="submit">Create tracker</button></form>');
+  $('#sf').addEventListener('submit', async ev => {
+    ev.preventDefault();
+    const f = ev.target, err = $('#serr'), b = f.querySelector('button[type=submit]');
+    const team = f.team.value.trim(), people = f.people.value.split(/\n/).map(s => s.trim()).filter(Boolean), p1 = f.p1.value, p2 = f.p2.value, tok = f.tok.value.trim();
+    if (!team) { err.textContent = 'Enter a team name.'; return; }
+    if (p1.length < 8) { err.textContent = 'Use a passcode of at least 8 characters.'; return; }
+    if (p1 !== p2) { err.textContent = 'The passcodes do not match.'; return; }
+    if (tok.length < 20) { err.textContent = 'Paste your admin edit key.'; return; }
+    b.disabled = true; b.textContent = 'Creating…'; err.textContent = '';
+    const prevTok = state.token; state.token = tok;
+    try {
+      const r = await fetch(apiBase(), {headers: ghHeaders(tok), cache: 'no-store'});
+      if (r.status === 401) throw new Error('The edit key is not valid or has expired.');
+      if (!r.ok) throw new Error('The edit key cannot see ' + repoLabel() + '. Check the repository name and the key\'s access.');
+      const d = starterData(team, people);
+      const env = await encryptData(d, p1);
+      let sha;
+      try { sha = await putRemote(env, null, 'Create leave tracker data'); }
+      catch (e) { if (e.code === 'conflict') throw new Error('A tracker already exists here. Reload the page to open it.'); throw e; }
+      localStorage.setItem(K.token, tok); localStorage.setItem(K.pass, p1); state.pass = p1;
+      state.tab = 'set'; applyData(d, env, sha); toast('Tracker created! Check the team list and holidays.', 4000);
+    } catch (e) { state.token = prevTok; err.textContent = e.message; b.disabled = false; b.textContent = 'Create tracker'; }
+  });
+}
+
+/* ---------------- events ---------------- */
+const actions = {
+  tab: a => { state.tab = a.dataset.t; render(); window.scrollTo(0, 0); },
+  view: a => { state.view = a.dataset.v; localStorage.setItem(K.view, state.view); render(); },
+  prev: () => shiftPeriod(-1), next: () => shiftPeriod(1),
+  today: () => { state.cursor = new Date(); render(); },
+  month: a => { state.cursor = new Date(state.cursor.getFullYear(), Number(a.dataset.m), 1); state.view = 'month'; localStorage.setItem(K.view, 'month'); render(); window.scrollTo(0, 0); },
+  day: a => openDay(a.dataset.k),
+  add: a => { const k = a.dataset.k; closeSheet(); openLeaveForm(null, k); },
+  edit: a => { const e = state.data.entries.find(x => x.id === a.dataset.id); closeSheet(); if (e) openLeaveForm(e); },
+  close: () => closeSheet(),
+  refresh: () => { if (!state.busy) sync(true); },
+  retry: () => boot(),
+  ftype: a => { const id = a.dataset.id, h = state.filters.hidden; state.filters.hidden = h.includes(id) ? h.filter(x => x !== id) : h.concat(id); saveFilters(); rebuildIndex(); render(); },
+  rp: a => { const n = new Date(), p = a.dataset.p; state.rep = p === 'tm' ? monthRange(n) : p === 'lm' ? monthRange(new Date(n.getFullYear(), n.getMonth() - 1, 1)) : p === 'nm' ? monthRange(new Date(n.getFullYear(), n.getMonth() + 1, 1)) : {from: n.getFullYear() + '-01-01', to: n.getFullYear() + '-12-31'}; render(); },
+  'csv-sum': () => exportSummary(), 'csv-ent': () => exportEntries(),
+  'tok-add': () => addToken(),
+  'tok-rm': async () => { if (await ask('Remove the admin edit key from this phone? You will still be able to view.', 'Remove', true)) { state.token = ''; localStorage.removeItem(K.token); render(); } },
+  lock: async () => { if (await ask('Lock this phone? You will need the team passcode (and edit key, for admins) again.', 'Lock', true)) { localStorage.removeItem(K.token); localStorage.removeItem(K.cache); forgetPass(); state.token = ''; boot(); } },
+  'm-add': () => addMembers(), 'm-edit': a => editMember(a.dataset.id),
+  't-add': () => addType(), 't-edit': a => editType(a.dataset.id),
+  'h-add': () => addHoliday(), 'h-paste': () => pasteHolidays(),
+  'h-year': a => { state.holYear = Number(a.dataset.y); render(); },
+  'h-del': async a => { const k = a.dataset.k; if (await ask('Remove the holiday on ' + fmtD(k) + '?', 'Remove', true)) commit(data => { data.holidays = data.holidays.filter(h => h.date !== k); }, {done: 'Holiday removed'}); },
+  'g-edit': () => editGeneral(), 'pass-ch': () => changePass()
+};
+document.addEventListener('click', ev => {
+  const a = ev.target.closest('[data-act]'); if (!a) return;
+  const fn = actions[a.dataset.act]; if (fn) { ev.preventDefault(); fn(a, ev); }
+});
+const changes = {
+  fmember: el => { state.filters.member = el.value; saveFilters(); rebuildIndex(); render(); },
+  rfrom: el => { state.rep.from = el.value; render(); },
+  rto: el => { state.rep.to = el.value; render(); }
+};
+document.addEventListener('change', ev => { const el = ev.target.closest('[data-chg]'); if (el && changes[el.dataset.chg]) changes[el.dataset.chg](el); });
+let touch = null;
+document.addEventListener('touchstart', ev => { touch = (ev.target.closest('#calview') && ev.touches.length === 1) ? {x: ev.touches[0].clientX, y: ev.touches[0].clientY, t: Date.now()} : null; }, {passive: true});
+document.addEventListener('touchend', ev => {
+  if (!touch || $('#modal-root').classList.contains('open')) return;
+  const t = ev.changedTouches[0], dx = t.clientX - touch.x, dy = t.clientY - touch.y;
+  if (Math.abs(dx) > 70 && Math.abs(dy) < 50 && Date.now() - touch.t < 700) shiftPeriod(dx < 0 ? 1 : -1);
+  touch = null;
+}, {passive: true});
+document.addEventListener('keydown', ev => { if (ev.key === 'Escape' && $('#modal-root').classList.contains('open') && !$('#dialog-root').classList.contains('open')) closeSheet(); });
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && state.data && state.pass && Date.now() - (state.sync.at || 0) > 60000 && !state.busy) sync(false); });
+window.addEventListener('online', () => { if (state.data && state.pass) sync(false); });
+
+/* ---------------- start ---------------- */
+async function boot() {
+  state.repo = detectRepo();
+  state.token = localStorage.getItem(K.token) || '';
+  state.pass = localStorage.getItem(K.pass) || '';
+  state.data = null; state.pendingRemote = null;
+  if (!window.crypto || !crypto.subtle) { screen('<h1>Open the secure link</h1><p class="muted">This app must be opened from its https:// address.</p>'); return; }
+  if (!state.repo) return renderConnect();
+  if (!state.pass) {
+    renderLoading();
+    try { const rem = await fetchRemote(); if (rem.notFound) return renderSetup(); state.pendingRemote = rem; }
+    catch (e) { if (!localStorage.getItem(K.cache)) { state.sync.msg = e.message; return renderOffline(); } }
+    return renderLock();
+  }
+  const c = localStorage.getItem(K.cache);
+  if (c) {
+    try { const d = await decryptData(JSON.parse(c), state.pass); state.data = d; state.sync = {status: 'syncing', at: 0, msg: ''}; rebuildIndex(); render(); }
+    catch (e) { if (e.code === 'badpass') { forgetPass(); return renderLock(); } }
+  } else renderLoading();
+  await sync(false);
+}
+if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('./sw.js').catch(() => {});
+boot();
+
+</script>
+<script>document.addEventListener('pointerdown',e=>{const b=e.target.closest('button,.btn,.mcell,.wrow');if(!b)return;const r=b.getBoundingClientRect(),s=Math.max(r.width,r.height);const cs=getComputedStyle(b);if(cs.position==='static')b.style.position='relative';b.style.overflow='hidden';const d=document.createElement('span');d.className='rip';d.style.cssText='width:'+s+'px;height:'+s+'px;left:'+(e.clientX-r.left-s/2)+'px;top:'+(e.clientY-r.top-s/2)+'px';b.appendChild(d);setTimeout(()=>d.remove(),650);},{passive:true});
+new MutationObserver(()=>document.querySelectorAll('.mgrid .mcell:not([style*="--i"])').forEach((c,i)=>c.style.setProperty('--i',i))).observe(document.documentElement,{childList:true,subtree:true});
+</script>
+</body>
+</html>
